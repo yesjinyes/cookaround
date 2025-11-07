@@ -21,7 +21,7 @@ public class ReviewRepository {
 
     // 사용자가 작성한 레시피에 달린 후기들의 평균
     public Double findAverageRatingByMemberId(Long memberId) {
-        return em.createQuery("select avg(rv.rating) from Review rv where rv.recipe.id in (" +
+        return em.createQuery("select round(avg(rv.rating), 1) from Review rv where rv.recipe.id in (" +
                         "select id from Recipe rc where rc.member.id = :memberId)", Double.class)
                 .setParameter("memberId", memberId)
                 .getSingleResult();
