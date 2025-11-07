@@ -1,7 +1,10 @@
 package com.project.cookaround.domain.review.service;
 
+import com.project.cookaround.domain.review.entity.Review;
 import com.project.cookaround.domain.review.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ReviewService {
@@ -28,6 +31,11 @@ public class ReviewService {
             return avg;
         }
         return 0.0;
+    }
+
+    // 마이페이지 - 내가 쓴 글/후기 - 후기 조회
+    public List<Review> getReviewByMemberId(Long memberId) {
+        return reviewRepository.findByMemberIdOrderById(memberId);
     }
 
 }

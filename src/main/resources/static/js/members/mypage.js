@@ -28,6 +28,20 @@ $(function () {
     // 내가 쓴 글/후기
     $(document).on("click", "#recipe-list", listMyRecipe); // 레시피
     $(document).on("click", "#cooking-tip-list", listMyCookingTip); // 요리팁
+    $(document).on("click", "#review-list", listMyReview); // 후기
+
+    // 내가 쓴 후기
+    function listMyReview() {
+        $.ajax({
+            url: "/api/members/mypage/reviews",
+            type: "GET",
+            success: function (reviews) {
+                $(".post-menu-item").removeClass("active");
+                $("#review-list").addClass("active");
+                renderReview(reviews);
+            },
+        });
+    }
 
     // 내가 쓴 요리팁
     function listMyCookingTip() {
@@ -55,7 +69,28 @@ $(function () {
         });
     }
 
-    // 내가 쓴 글/후기 - 동적 HTML 태그 생성
+    // 내가 쓴 글/후기 - 동적 HTML 태그 생성 (후기)
+    function renderReview(reviews) {
+        let table = $("#post-table-body");
+        table.empty();
+
+        for (const review of reviews) {
+            let row = $("<tr>");
+            let id = $("<td>").text(review.id);
+            let category = $("<td>").text(review.category);
+            let content = $("<td>").text(review.content);
+            let createdAd = $("<td>").text(review.createdAt);
+
+            row.append(id);
+            row.append(category);
+            row.append(content);
+            row.append(createdAd);
+
+            table.append(row);
+        }
+    }
+
+    // 내가 쓴 글/후기 - 동적 HTML 태그 생성 (요리팁, 레시피)
     function renderPost(posts) {
         let table = $("#post-table-body");
         table.empty();
