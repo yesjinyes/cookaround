@@ -171,3 +171,13 @@ table {
     border-collapse: separate; /* 필수! */
     border-spacing: 100px 0;    /* 가로 20px, 세로 0px */
 }
+
+ul {
+    list-style: none;
+}
+
+.page-btn {
+    display: inline-block;
+    margin: 5px;
+    cursor: pointer;
+}

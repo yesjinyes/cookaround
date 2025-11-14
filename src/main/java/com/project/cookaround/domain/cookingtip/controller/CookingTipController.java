@@ -42,7 +42,7 @@ public class CookingTipController {
                        @RequestParam(defaultValue = "1") int page,
                        @AuthenticationPrincipal CustomUserDetails userDetails) {
         // 페이징 처리
-        Map<String, Object> pageSetting = cookingTipService.setPage(category, page);
+        Map<String, Object> pageSetting = cookingTipService.setPage(page, cookingTipService.getTotalCount(category));
         model.addAttribute("currentPage", page);
         model.addAttribute("startPage", pageSetting.get("startPage"));
         model.addAttribute("endPage", pageSetting.get("endPage"));
@@ -188,13 +188,29 @@ public class CookingTipController {
     // 마이페이지 - 내가 쓴 글/후기 - 요리팁 목록 조회
     @ResponseBody
     @GetMapping("/api/members/mypage/cooking-tips")
-    public List<CookingTipResponseDto> listByMemberId(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public Map<String, Object> listByMemberId(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam(defaultValue = "1") int page) {
+
+        System.out.println("CookingTipController.listByMemberId");
+        System.out.println("page = " + page);
+
+        Map<String, Object> response = new HashMap<>();
+
+        // 페이징 처리
+        Map<String, Object> pageSetting = cookingTipService.setPage(page, cookingTipService.getTotalCount(userDetails.getId()));
+        response.put("currentPage", page);
+        response.put("startPage", pageSetting.get("startPage"));
+        response.put("endPage", pageSetting.get("endPage"));
+        response.put("hasPrev", pageSetting.get("hasPrev"));
+        response.put("hasNext", pageSetting.get("hasNext"));
+
+        // 요리팁 조회
         List<CookingTipResponseDto> cookingTips = new ArrayList<>();
-        for (CookingTip cookingTip : cookingTipService.getCookingTipByMemberId(userDetails.getId())) {
+        for (CookingTip cookingTip : cookingTipService.getCookingTipByMemberId(userDetails.getId(), page - 1)) {
             cookingTips.add(CookingTipResponseDto.fromEntity(cookingTip));
         }
+        response.put("cookingTips", cookingTips);
 
-        return cookingTips;
+        return response;
     }
 
 }

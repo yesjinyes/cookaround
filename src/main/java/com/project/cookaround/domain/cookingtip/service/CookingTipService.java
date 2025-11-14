@@ -66,15 +66,7 @@ public class CookingTipService {
     }
 
     // 페이징 처리
-    public Map<String, Object> setPage(String category, int page) {
-        Long totalCount = null; // 전체 요리팁 개수
-        if (category.equals("ALL")) {
-            totalCount = cookingTipRepository.countAll();
-        } else {
-            CookingTipCategory cookingTipCategory = CookingTipCategory.fromString(category);
-            totalCount = cookingTipRepository.countByCategory(cookingTipCategory);
-        }
-
+    public Map<String, Object> setPage(int page, Long totalCount) {
         int totalPage = (int) Math.ceil((double) totalCount / PAGE_SIZE); // 전체 페이지 수, 소수점 올림
 
         // 페이징 버튼
@@ -103,7 +95,6 @@ public class CookingTipService {
         boolean hasPrev = startPage > 1;
         boolean hasNext = endPage < totalPage;
 
-
         Map<String, Object> pageSetting = new HashMap<>();
         pageSetting.put("startPage", startPage);
         pageSetting.put("endPage", endPage);
@@ -111,6 +102,20 @@ public class CookingTipService {
         pageSetting.put("hasNext", hasNext);
 
         return pageSetting;
+    }
+
+    // 요리팁 목록 화면에서 사용 - 카테고리별 요리팁 개수 조회
+    public Long getTotalCount(String category) {
+        if (category.equals("ALL")) {
+            return cookingTipRepository.countAll();
+        } else {
+            return cookingTipRepository.countByCategory(CookingTipCategory.fromString(category));
+        }
+    }
+
+    // 마이페이지 내가 쓴 글/후기 화면에서 사용 - 회원별 요리팁 개수 조회
+    public Long getTotalCount(Long memberId) {
+        return cookingTipRepository.countByMemberId(memberId);
     }
 
     // 요리팁 조회 - 카테고리
@@ -188,7 +193,7 @@ public class CookingTipService {
     }
 
     // 마이페이지 - 내가 쓴 글/후기 - 요리팁 조회
-    public List<CookingTip> getCookingTipByMemberId(Long memberId) {
-        return cookingTipRepository.findByMemberIdOrderByIdDesc(memberId);
+    public List<CookingTip> getCookingTipByMemberId(Long memberId, int page) {
+        return cookingTipRepository.findByMemberIdOrderByIdDesc(memberId, page, PAGE_SIZE);
     }
 }

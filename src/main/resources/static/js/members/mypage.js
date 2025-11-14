@@ -30,6 +30,9 @@ $(function () {
     $(document).on("click", "#cooking-tip-list", listMyCookingTip); // 요리팁
     $(document).on("click", "#review-list", listMyReview); // 후기
 
+
+    $(document).on("click", ".page-btn", listMyCookingTip); // 페이징 버튼 클릭 이벤트
+
     // 내가 쓴 후기
     function listMyReview() {
         $.ajax({
@@ -45,16 +48,88 @@ $(function () {
 
     // 내가 쓴 요리팁
     function listMyCookingTip() {
+        const page = $(this).data("page");
         $.ajax({
             url: "/api/members/mypage/cooking-tips",
             type: "GET",
-            success: function (cookingTips) {
+            data: {
+                page: page
+            },
+            success: function (response) {
                 $(".post-menu-item").removeClass("active");
                 $("#cooking-tip-list").addClass("active");
-                renderPost(cookingTips);
+                renderList(response, "cookingTips");
             },
         });
     }
+
+    // 내가 쓴 글/후기 - 게시물 목록 생성
+    function renderList(response, type) {
+        let table = $("#post-table-body");
+        table.empty();
+
+        // 게시글 목록
+        for (const post of response[type]) {
+            let row = $("<tr>");
+            let id = $("<td>").text(post.id);
+            let category = $("<td>").text(post.category);
+            let content = $("<td>").text(post.title);
+            let createdAd = $("<td>").text(post.createdAt);
+
+            row.append(id);
+            row.append(category);
+            row.append(content);
+            row.append(createdAd);
+
+            table.append(row);
+        }
+
+        renderPagination(response, type); // 페이징
+    }
+
+    // 내가 쓴 글/후기 - 페이징 버튼 생성
+    function renderPagination(response, type) {
+        let pagination = $("#page-container");
+        pagination.empty();
+
+        let ul = $("<ul>");
+
+        if (response.hasPrev) {
+            let prev = $("<li>")
+                .text("≪")
+                .data("page", response.startPage - 1)
+                .data("type", type)
+                .addClass("page-btn");
+
+            ul.append(prev);
+        }
+
+        for (let i = response.startPage; i <= response.endPage; i++) {
+            let page = $("<li>")
+                .text(i)
+                .data("page", i)
+                .data("type", type)
+                .addClass("page-btn");
+
+            if (response.currentPage == i) {
+                page.addClass("active");
+            }
+            ul.append(page);
+        }
+
+        if (response.hasNext) {
+            let next = $("<li>")
+                .text("≫")
+                .data("page", response.endPage + 1)
+                .data("type", type)
+                .addClass("page-btn");
+
+            ul.append(next);
+        }
+
+        pagination.append(ul);
+    }
+
 
     // 내가 쓴 레시피
     function listMyRecipe() {

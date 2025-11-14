@@ -100,13 +100,14 @@ public class CookingTipRepository {
                 .getSingleResult();
     }
 
-    // 카테고리별 요리팁 개수 조회
+    // 요리팁 목록 - 카테고리별 요리팁 개수 조회
     public Long countByCategory(CookingTipCategory category) {
         return em.createQuery("select count(c) from CookingTip c where c.category = :category", Long.class)
                 .setParameter("category", category)
                 .getSingleResult();
     }
 
+    // 마이페이지 - 내가 쓴 글/후기 - 요리팁 개수 조회
     public Long countByMemberId(Long memberId) {
         return em.createQuery("select count(c) from CookingTip c where c.member.id = :memberId", Long.class)
                 .setParameter("memberId", memberId)
@@ -114,9 +115,11 @@ public class CookingTipRepository {
     }
 
     // 마이페이지 - 내가 쓴 글/후기 - 요리팁 조회
-    public List<CookingTip> findByMemberIdOrderByIdDesc(Long memberId) {
+    public List<CookingTip> findByMemberIdOrderByIdDesc(Long memberId, int page, int PAGE_SIZE) {
         return em.createQuery("select c from CookingTip c where c.member.id = :memberId order by c.id desc", CookingTip.class)
                 .setParameter("memberId", memberId)
+                .setFirstResult(page * PAGE_SIZE)
+                .setMaxResults(PAGE_SIZE)
                 .getResultList();
     }
 
