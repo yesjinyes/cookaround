@@ -13,15 +13,19 @@ public class RecipeRepository {
     @PersistenceContext
     private EntityManager em;
 
+    // 마이페이지 - 내가 쓴 글/후기 - 레시피 개수 조회
     public Long countByMemberId(Long memberId) {
         return em.createQuery("select count(r) from Recipe r where r.member.id = :memberId", Long.class)
                 .setParameter("memberId", memberId)
                 .getSingleResult();
     }
 
-    public List<Recipe> findByMemberIdOrderById(Long memberId) {
+    // 마이페이지 - 내가 쓴 글/후기 - 레시피 조회
+    public List<Recipe> findByMemberIdOrderByIdDesc(Long memberId, int page, int PAGE_SIZE) {
         return em.createQuery("select r from Recipe r where r.member.id = :memberId order by r.id desc", Recipe.class)
                 .setParameter("memberId", memberId)
+                .setFirstResult(page * PAGE_SIZE)
+                .setMaxResults(PAGE_SIZE)
                 .getResultList();
     }
 

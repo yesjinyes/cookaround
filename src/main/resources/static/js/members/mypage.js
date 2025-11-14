@@ -8,7 +8,7 @@ $(function () {
         }
     });
 
-    listMyRecipe(); // 마이페이지 첫 화면에서 조회
+    listMyRecipe("recipes", 1); // 마이페이지 첫 화면에서 조회
 
     // 프로필 사진 변경 모달
     $(document).on("click", "#edit-profile-btn", openModal);
@@ -25,13 +25,29 @@ $(function () {
     $(document).on("click", "#cancel-edit-profile-btn", closeModal);
 
 
-    // 내가 쓴 글/후기
-    $(document).on("click", "#recipe-list", listMyRecipe); // 레시피
-    $(document).on("click", "#cooking-tip-list", listMyCookingTip); // 요리팁
-    $(document).on("click", "#review-list", listMyReview); // 후기
+    // 내가 쓴 글/후기 - 네비게이션 메뉴 클릭
+    $(document).on("click", ".post-menu-item", function () {
+        let type = $(this).data("type");
+        listByType(type, 1); // 메뉴 클릭 시 항상 1페이지 조회
+    });
 
+    // 내가 쓴 글/후기 - 페이징 버튼 클릭
+    $(document).on("click", ".page-btn", function () {
+        let type = $(this).data("type");
+        let page = $(this).data("page");
+        listByType(type, page);
+    });
 
-    $(document).on("click", ".page-btn", listMyCookingTip); // 페이징 버튼 클릭 이벤트
+    // 게시글 타입별 분기 처리
+    function listByType(type, page) {
+        if(type == "recipes") {
+            listMyRecipe(type, page);
+        } else if (type == "cookingTips") {
+            listMyCookingTip(type, page);
+        } else {
+            listMyReview();
+        }
+    }
 
     // 내가 쓴 후기
     function listMyReview() {
@@ -46,9 +62,24 @@ $(function () {
         });
     }
 
+    // 내가 쓴 레시피
+    function listMyRecipe(type, page) {
+        $.ajax({
+            url: "/api/members/mypage/recipes",
+            type: "GET",
+            data: {
+                page: page
+            },
+            success: function (response) {
+                $(".post-menu-item").removeClass("active");
+                $("#recipe-list").addClass("active");
+                renderList(response, type);
+            },
+        });
+    }
+
     // 내가 쓴 요리팁
-    function listMyCookingTip() {
-        const page = $(this).data("page");
+    function listMyCookingTip(type, page) {
         $.ajax({
             url: "/api/members/mypage/cooking-tips",
             type: "GET",
@@ -58,7 +89,7 @@ $(function () {
             success: function (response) {
                 $(".post-menu-item").removeClass("active");
                 $("#cooking-tip-list").addClass("active");
-                renderList(response, "cookingTips");
+                renderList(response, type);
             },
         });
     }
@@ -128,20 +159,6 @@ $(function () {
         }
 
         pagination.append(ul);
-    }
-
-
-    // 내가 쓴 레시피
-    function listMyRecipe() {
-        $.ajax({
-            url: "/api/members/mypage/recipes",
-            type: "GET",
-            success: function (recipes) {
-                $(".post-menu-item").removeClass("active");
-                $("#recipe-list").addClass("active");
-                renderPost(recipes);
-            },
-        });
     }
 
     // 내가 쓴 글/후기 - 동적 HTML 태그 생성 (후기)

@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor // final이 붙은 필드만 골라서 생성자 자동 생성
 @Controller
@@ -47,18 +49,28 @@ public class RecipeController {
 
 
     // JPA
-
-    // 레시피 조회 (Ajax)
-    // 마이페이지 - 내가 쓴 글/후기 메뉴에서 사용
+    // 마이페이지 - 내가 쓴 글/후기 - 레시피 목록 조회
     @ResponseBody
     @GetMapping("/api/members/mypage/recipes")
-    public List<RecipeResponseDto> listByMemberId(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    public Map<String, Object> listByMemberId(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam(defaultValue = "1") int page) {
+        Map<String, Object> response = new HashMap<>();
+
+        // 페이징 처리
+        Map<String, Object> pageSetting = recipeService.setPage(page, recipeService.getTotalCount(userDetails.getId()));
+        response.put("currentPage", page);
+        response.put("startPage", pageSetting.get("startPage"));
+        response.put("endPage", pageSetting.get("endPage"));
+        response.put("hasPrev", pageSetting.get("hasPrev"));
+        response.put("hasNext", pageSetting.get("hasNext"));
+
+        // 레시피 조회
         List<RecipeResponseDto> recipes = new ArrayList<>();
-        for (Recipe recipe : recipeService.getRecipeByMemberId(userDetails.getId())) {
+        for (Recipe recipe : recipeService.getRecipeByMemberId(userDetails.getId(), page - 1)) {
             recipes.add(RecipeResponseDto.fromEntity(recipe));
         }
+        response.put("recipes", recipes);
 
-        return recipes;
+        return response;
     }
 
 }
