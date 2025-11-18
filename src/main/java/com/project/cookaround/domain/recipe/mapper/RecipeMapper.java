@@ -14,6 +14,6 @@ public interface RecipeMapper {
                                        @Param("sort") String sort);
 
     // 레시피 상세 페이지
-    String showRecipeDetail(String recipeId);
+    RecipeDto showRecipeDetail(@Param("recipeId") Long recipeId);
 
 }

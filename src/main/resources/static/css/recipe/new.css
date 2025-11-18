@@ -1,0 +1,200 @@
+* {
+    font-family: "Noto Sans KR";
+}
+#container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+.section {
+    margin-bottom: 40px;
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+}
+
+.section-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 8px;
+    color: #495057;
+}
+
+.form-control, .form-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* 요리 정보 그리드 */
+.recipe-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* 난이도 별점 */
+.difficulty-stars {
+    display: flex;
+    gap: 10px;
+}
+
+.star {
+    font-size: 2rem;
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.2s;
+}
+
+.star.active {
+    color: #ffc107;
+}
+
+.star:hover,
+.star:hover ~ .star {
+    color: #ffc107;
+}
+
+/* 재료/양념 아이템 */
+.ingredient-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.ingredient-list {
+    margin-bottom: 20px;
+}
+
+.ingredient-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    background-color: white;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+}
+
+.drag-handle {
+    cursor: move;
+    color: #6c757d;
+    font-size: 1.2rem;
+    padding: 5px;
+}
+
+.ingredient-item input,
+.ingredient-item select {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.ingredient-item input:first-of-type {
+    flex: 2;
+}
+
+.btn-remove {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    background-color: #ec5563;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.btn-remove:hover {
+    background-color: #c82333;
+}
+
+.btn-add-container {
+    text-align: center;
+}
+
+.btn-add {
+    padding: 8px 20px;
+    background-color: #c0c3c6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.btn-add:hover {
+    background-color: #5a6268;
+}
+
+/* 제출 버튼 */
+.submit-container {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #dee2e6;
+}
+
+.submit-container button {
+    padding: 12px 40px;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.btn-submit {
+    background-color: #ffba3b;
+    color: white;
+}
+
+.btn-submit:hover {
+    background-color: #e0a840;
+}
+
+.btn-cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background-color: #5a6268;
+}
+
+/* 드래그 중 스타일 */
+.dragging {
+    opacity: 0.5;
+}

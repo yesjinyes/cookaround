@@ -17,6 +17,7 @@ public class RecipeController {
 
     private final RecipeService recipeService;
 
+    // 레시피 목록 페이지
     @GetMapping("/recipe/list")
     public String recipeList(Model model) {
         List<RecipeDto> recipes = recipeService.showRecipeList();
@@ -24,8 +25,12 @@ public class RecipeController {
         return "recipe/list";
     }
 
+    @GetMapping("/recipe/new")
+    public String newRecipe() {
+        return "recipe/new";
+    }
 
-    // 레시피 목록 페이지(Ajax)
+    // 레시피 목록 카테고리, 정렬 버튼 ajax
     @GetMapping("/recipe/api/list")
     @ResponseBody
     public List<RecipeDto> recipeListJson(@RequestParam(defaultValue = "ALL") String category,
@@ -36,7 +41,16 @@ public class RecipeController {
 
     // 레시피 상세 페이지
     @GetMapping("/recipe/detail")
-    public String showRecipeDetail(String recipeId) {
+    public String showRecipeDetail(@RequestParam("id") Long recipeId, Model model) {
+        RecipeDto recipe = recipeService.showRecipeDetail(recipeId);
+        model.addAttribute("recipe", recipe);
+        return "recipe/detail";
+    }
+
+    // 레시피 상세 JSON 데이터 반환
+    @GetMapping("/api/recipe/detail")
+    @ResponseBody
+    public RecipeDto getRecipeDetail(@RequestParam("id") Long recipeId) {
         return recipeService.showRecipeDetail(recipeId);
     }
 

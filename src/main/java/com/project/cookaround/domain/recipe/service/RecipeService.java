@@ -23,7 +23,7 @@ public class RecipeService {
     }
 
     // 레시피 상세 페이지
-    public String showRecipeDetail(String recipeId) {
+    public RecipeDto showRecipeDetail(Long recipeId) {
         return recipeMapper.showRecipeDetail(recipeId);
     }
 

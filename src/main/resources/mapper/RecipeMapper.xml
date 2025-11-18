@@ -48,9 +48,23 @@
 
     <!-- 레시피 상세 페이지 -->
     <select id="showRecipeDetail" resultType="com.project.cookaround.domain.recipe.dto.RecipeDto">
-        SELECT *
-        FROM recipe
-        WHERE id = #{id}
+        SELECT r.id,
+               r.member_id as memberId,
+               r.category,
+               r.title,
+               r.description,
+               r.cooking_time as cookingTime,
+               r.difficulty,
+               r.serving,
+               r.view_count as viewCount,
+               r.like_count as likeCount,
+               r.created_at as createdAt,
+               r.updated_at as updatedAt,
+               m.login_id as loginId,
+               m.profile
+        FROM recipe r
+        JOIN member m ON r.member_id = m.id
+        WHERE r.id = #{recipeId}
     </select>
 
 </mapper>

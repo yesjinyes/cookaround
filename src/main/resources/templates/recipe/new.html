@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>레시피 등록</title>
+    <link rel="stylesheet" href="/css/recipe/new.css">
+    <link rel="stylesheet" href="/css/common/header.css">
+</head>
+<body>
+<div th:replace="~{common/header :: header}"></div>
+
+<div id="container">
+    <h1>레시피 등록</h1>
+
+    <form id="recipe-form">
+        <!-- 기본 정보 -->
+        <div class="section">
+            <div class="section-title">기본 정보</div>
+
+            <div class="form-group">
+                <label for="category">카테고리</label>
+                <select id="category" name="category" class="form-select" required>
+                    <option value="">선택하세요</option>
+                    <option value="KOREAN">한식</option>
+                    <option value="WESTERN">양식</option>
+                    <option value="JAPANESE">일식</option>
+                    <option value="CHINESE">중식</option>
+                    <option value="DESSERT">디저트</option>
+                    <option value="OTHER">기타</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="title">레시피 이름</label>
+                <input type="text" id="title" name="title" class="form-control" placeholder="예) 김치찌개" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">요리 소개</label>
+                <textarea id="description" name="description" class="form-control" placeholder="이 레시피에 대해 소개해주세요"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>요리 정보</label>
+                <div class="recipe-info-grid">
+                    <div>
+                        <label style="font-weight: normal; font-size: 0.9rem;">난이도</label>
+                        <div class="difficulty-stars" id="difficulty-stars">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                        <input type="hidden" id="difficulty" name="difficulty" value="1">
+                    </div>
+
+                    <div>
+                        <label for="serving" style="font-weight: normal; font-size: 0.9rem;">인원</label>
+                        <select id="serving" name="serving" class="form-select">
+                            <option value="1">1인분</option>
+                            <option value="2" selected>2인분</option>
+                            <option value="3">3인분</option>
+                            <option value="4">4인분</option>
+                            <option value="5">5인분</option>
+                            <option value="6">6인분</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="cooking-time" style="font-weight: normal; font-size: 0.9rem;">조리시간</label>
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                            <input type="number" id="cooking-time" name="cookingTime" class="form-control" placeholder="30" min="1">
+                            <span>분</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 재료 정보 -->
+        <div class="section">
+            <div class="section-title">재료 정보</div>
+
+            <div class="ingredient-header">
+                <h4 style="margin: 0; font-size: 1.1rem;">재료</h4>
+            </div>
+            <div class="ingredient-list" id="ingredient-list">
+                <div class="ingredient-item" draggable="true">
+                    <span class="drag-handle">☰</span>
+                    <input type="text" name="ingredientName[]" placeholder="재료명" required>
+                    <input type="text" name="ingredientAmount[]" placeholder="수량" required>
+                    <select name="ingredientUnit[]" required>
+                        <option value="">단위</option>
+                        <option value="g">g</option>
+                        <option value="ml">ml</option>
+                        <option value="개">개</option>
+                        <option value="큰술">큰술</option>
+                        <option value="작은술">작은술</option>
+                        <option value="컵">컵</option>
+                    </select>
+                    <button type="button" class="btn-remove" onclick="removeItem(this)">−</button>
+                </div>
+            </div>
+            <div class="btn-add-container">
+                <button type="button" class="btn-add" onclick="addIngredient('ingredient')">재료 추가</button>
+            </div>
+
+            <div class="ingredient-header" style="margin-top: 30px;">
+                <h4 style="margin: 0; font-size: 1.1rem;">양념</h4>
+            </div>
+            <div class="ingredient-list" id="seasoning-list">
+                <div class="ingredient-item" draggable="true">
+                    <span class="drag-handle">☰</span>
+                    <input type="text" name="seasoningName[]" placeholder="양념명" required>
+                    <input type="text" name="seasoningAmount[]" placeholder="수량" required>
+                    <select name="seasoningUnit[]" required>
+                        <option value="">단위</option>
+                        <option value="g">g</option>
+                        <option value="ml">ml</option>
+                        <option value="개">개</option>
+                        <option value="큰술">큰술</option>
+                        <option value="작은술">작은술</option>
+                        <option value="컵">컵</option>
+                    </select>
+                    <button type="button" class="btn-remove" onclick="removeItem(this)">−</button>
+                </div>
+            </div>
+            <div class="btn-add-container">
+                <button type="button" class="btn-add" onclick="addIngredient('seasoning')">양념 추가</button>
+            </div>
+        </div>
+
+        <!-- 제출 버튼 -->
+        <div class="submit-container">
+            <button type="button" class="btn-cancel" onclick="location.href='/recipe/list'">취소</button>
+            <button type="submit" class="btn-submit">레시피 등록</button>
+        </div>
+    </form>
+</div>
+
+<script src="/js/recipe/new.js"></script>
+</body>
+</html>
