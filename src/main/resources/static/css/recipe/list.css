@@ -1,0 +1,141 @@
+* {
+    font-family: "Noto Sans KR";
+}
+
+#container {
+    margin: 5% 10%;
+}
+
+/* 카테고리 영역 */
+#category-container {
+    margin-top: 30px;
+}
+
+#category-container a {
+    text-decoration: none;
+    color: black;
+    margin: 0 5px;
+}
+
+#category-container a:first-child {
+    margin-left: 0;
+}
+
+/* 버튼 영역 */
+#btn-container {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+/* 정렬 영역 */
+#sort-container {
+    margin-bottom: 5px;
+    text-align: right;
+}
+
+#sort-container a {
+    text-decoration: none;
+    color: black;
+    margin-left: 10px;
+}
+
+/* 활성화 스타일 */
+#category-container a.active,
+#sort-container a.active {
+    color: orange;
+    font-weight: bold;
+}
+
+/* 카드 전체 컨테이너 구조 */
+#card-container {
+    display: grid;
+    grid-template-columns: repeat(5, 280px); /* 한 줄에 5개 */
+    gap: 20px;
+    justify-content: space-between;
+    margin-bottom: 5%;
+}
+
+/* 카드 스타일 */
+.recipe-card {
+    width: 280px;
+    height: 360px;
+    margin-bottom: 10%;
+    display: inline-block;
+    cursor: pointer;
+    padding: 0;
+    border: none;
+    background: white;
+}
+
+/* 이미지 */
+.card-img {
+    width: 280px;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+}
+
+/* 제목 */
+.card-title {
+    margin: 3% 0;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 작성자 영역 */
+.member-info {
+    display: inline-block;
+    width: 90%;
+    margin: 0;
+    vertical-align: middle;
+}
+
+/* 프로필 이미지 */
+.card-profile {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+    margin-right: 2px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ddd;
+}
+
+/* 작성자 이름 */
+.card-loginId {
+    display: inline-block;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+/* 좋아요 하트 */
+.img-heart {
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    object-fit: contain;
+    cursor: pointer;
+}
+
+/* 하단 구성 (작성자 + 좋아요) */
+.review-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 별점 텍스트 */
+.card-review {
+    font-size: 0.9rem;
+    color: #333;
+}
